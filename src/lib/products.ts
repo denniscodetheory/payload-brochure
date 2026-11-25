@@ -3,7 +3,6 @@ import { getPayload } from 'payload'
 
 import type { Media, Product } from '@/payload-types'
 import type { CategoryValue } from './categories'
-import { SAMPLE_PRODUCTS } from './sample-data'
 import type { ImageView, ProductView } from './types'
 
 export type { ProductView, ImageView }
@@ -33,16 +32,16 @@ const toView = (p: Product): ProductView => ({
   richDescription: p.description,
 })
 
-/** Reads products from Payload. Falls back to the built-in samples if the database is empty or unreachable. */
+/** Reads products from Payload. Returns an empty list if the database can't be reached. */
 async function loadAll(): Promise<ProductView[]> {
   try {
     const payload = await getPayload({ config })
     const { docs } = await payload.find({ collection: 'products', depth: 1, limit: 200, sort: '-createdAt' })
-    if (docs.length > 0) return docs.map(toView)
+    return docs.map(toView)
   } catch (err) {
-    console.warn('[products] Could not read from the database, showing sample products.', (err as Error).message)
+    console.warn('[products] Could not read from the database.', (err as Error).message)
+    return []
   }
-  return SAMPLE_PRODUCTS
 }
 
 export async function getProducts(opts: { featured?: boolean; category?: string; limit?: number } = {}) {

@@ -2,7 +2,7 @@ import type { CategoryValue } from './categories'
 
 export type ImageView = { url: string; alt: string; width: number; height: number }
 
-/** The shape the pages render. Built from Payload documents or from the built-in sample data. */
+/** The shape the pages render. Built from Payload documents. */
 export type ProductView = {
   id: string
   slug: string
@@ -19,6 +19,6 @@ export type ProductView = {
   specs: { label: string; value: string }[]
   /** Payload rich text (from the database). */
   richDescription?: unknown
-  /** Plain paragraphs (from the sample data). */
+  /** Plain paragraphs. */
   paragraphs?: string[]
 }
